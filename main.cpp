@@ -4,16 +4,18 @@
 #include "EthernetInterface.h"
 #include "wizfi310-driver/WizFi310Interface.h"
 
-#define WIFI_SSID "APD Surveillance Van #24"
-#define WIFI_PASSWORD "XXXXXXXXXXXXX"
-WizFi310Interface net(D1, D0, true);
+#define WIFI_SSID "Penfoldlo"
+#define WIFI_PASSWORD "deadbeef01"
 
 DigitalOut led1(LED1);
-DigitalOut led2(LED2);
-
 
 int main(int argc, const char **argv) {
+    led1 = 0;
+    printf("Sleeping\n");
+    wait_ms(3000);
     printf("main started\n");
+    WizFi310Interface net(D1, D0, true);
+    
 
     net.connect(WIFI_SSID, WIFI_PASSWORD, NSAPI_SECURITY_WPA_WPA2, 0);
 
@@ -22,18 +24,19 @@ int main(int argc, const char **argv) {
     if (ip == NULL) {
         printf("Failed to connect to network. Not sure why\n");
         while(1) {
-            led2 = 1;
+            led1 = 1;
             wait(0.05);
-            led2 = 0;
+            led1 = 0;
             wait(0.05);
         }
     }
     printf("IP address is %s\n", ip ? ip: "No IP");
+  
     while(1) {
         led1 = 1;
-        wait(0.5);
+        wait(4);
         led1 = 0;
-        wait(0.5);
+        wait(4);
     }
 }
 
